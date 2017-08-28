@@ -63,7 +63,11 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         pub.text = row['Publisher']
 
         language = SubElement(record, 'mods:language')
-        language.text = row['Language']
+        if '|' in row['Language']:
+            language = row['Language'].split('|').text
+            # language.text = language
+        else:
+            language.text = row['Language']
 
         namerow = row['CreatorName'].split('|')
 
@@ -85,7 +89,7 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         # info about the nature of the resource. not from the spreadsheet
         physDesc = SubElement(record, 'mods:physicalDescription')
         digOr = SubElement(physDesc, 'mods:digitalOrigin')
-        digOr.text = row['digitalOrigin']
+        digOr.text = row['DigitalOrigin']
         form = SubElement(physDesc, 'mods:form')
         form.set('type', 'material')
         form.text = row['Form']
@@ -118,7 +122,12 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         # related item was used for the host parent of the plate, e.g. the
         # monographic volume
         relatedItem = SubElement(record, 'mods:relatedItem')
-        relatedItem.set('type', 'host')
-        relatedItem.text = row['RelatedItem']
+        relatedItem.set('type', 'series')
+        relatedTitleInfo = SubElement(relatedItem,'mods:titleInfo')
+        relatedTitle = SubElement(relatedTitleInfo,'mods:title')
+
+        relatedTitle.text = row['RelatedItem']
+
+        extension = SubElement(record,'mods:extension')
 
     tree.write(id + '.xml', xml_declaration=True, encoding="UTF-8")
