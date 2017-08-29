@@ -9,25 +9,27 @@ from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 # 2015-10-07. Converts gould_books.csv to MODS. Records are for plates only but book records can be derived or use existing MARC records.
 # dict[key][0] etc
 # add second date for bird ksrl_sc_gould_ng_1_2_002.tif - 1880:01:01
-xmlFile = 'newBatch.xml'
-xmlData = open(xmlFile, 'w')
-# dataFile=sys.argv[1]
+
+# xmlData = open(xmlFile, 'w')
+dataFile=sys.argv[1]
 
 ts = time.time()
 st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
 
-root = Element('mods:modsCollection')
-root.set('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
-root.set('xmlns:mods', 'http://www.loc.gov/mods/v3')
-root.set('xsi:schemaLocation',
-         'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd')
-tree = ET.ElementTree(root)
+
 
 
 with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
     reader = csv.DictReader(csvfile)
 
     for row in reader:
+        root = Element('mods:modsCollection')
+        root.set('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+        root.set('xmlns:mods', 'http://www.loc.gov/mods/v3')
+        root.set('xmlns:xlink','http://www.w3.org/1999/xlink')
+        root.set('xsi:schemaLocation',
+                 'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd')
+        tree = ET.ElementTree(root)
 
         record = SubElement(root, 'mods:mods')
         record.set('xsi:schemaLocation',
@@ -62,26 +64,37 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         pub = SubElement(originInfo, 'mods:publisher')
         pub.text = row['Publisher']
 
-        language = SubElement(record, 'mods:language')
-        if '|' in row['Language']:
-            language = row['Language'].split('|').text
-            # language.text = language
-        else:
-            language.text = row['Language']
+
+        langrow=row['Language'].split('|')
+        for x in langrow:
+            language = SubElement(record, 'mods:language')
+            languageTerm = SubElement(language,'mods:languageTerm')
+            languageTerm.set('type','text')
+            languageTerm.text=x
+        # if '|' in row['Language']:
+        #     posh = row['Language'].split('|')
+        #
+        #     for x in posh:
+        #         language.text=str(x)
+        #     # print(language)
+        #     # language.text = language
+        # else:
+        #     language.text = row['Language']
 
         namerow = row['CreatorName'].split('|')
 
-        name = SubElement(record, 'mods:name')
-        name.set('type', 'personal')
-        namePart = SubElement(name, 'mods:namePart')
-        role = SubElement(name, 'mods:role')
-        roleTermcode = SubElement(role, 'mods:roleTerm')
-        roleTermcode.set('type', 'code')
 
-        roleTermtext = SubElement(role, 'mods:roleTerm')
-        roleTermtext.set('type', 'text')
 
         for x in namerow:
+            name = SubElement(record, 'mods:name')
+            name.set('type', 'personal')
+            namePart = SubElement(name, 'mods:namePart')
+            role = SubElement(name, 'mods:role')
+            # roleTermcode = SubElement(role, 'mods:roleTerm')
+            # roleTermcode.set('type', 'code')
+
+            roleTermtext = SubElement(role, 'mods:roleTerm')
+            roleTermtext.set('type', 'text')
             y = x.split(';')
             namePart.text = y[0]
             roleTermtext.text = y[1]
@@ -93,6 +106,10 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         form = SubElement(physDesc, 'mods:form')
         form.set('type', 'material')
         form.text = row['Form']
+
+        identifier = SubElement(record,'mods:identifier')
+        identifier.set('type','local')
+        identifier.text = row['Identifier']
 
         interMed = SubElement(physDesc, 'mods:internetMediaType')
         interMed.text = 'audio/wav'
@@ -107,6 +124,7 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         genre.text = 'Oral histories'
         accessCond = SubElement(record, 'mods:accessCondition')
         accessCond.set('type', 'use and reproduction')
+        accessCond.set('xlink:href','http://rightsstatements.org/page/InC-NC/1.0/?language=en')
         accessCond.text = 'This Item is protected by copyright and/or related rights. You are free to use this Item in any way that is permitted by the copyright and related rights legislation that applies to your use. In addition, no permission is required from the rights-holders for non-commercial uses. For other uses you need to obtain permission from the rights-holders.'
         #
 
@@ -128,6 +146,18 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
 
         relatedTitle.text = row['RelatedItem']
 
+        recordInfo = SubElement(record,'mods:recordInfo')
+        recordCreationDate = SubElement(recordInfo,'mods:recordCreationDate')
+        recordCreationDate.set('encoding','w3cdtf')
+        recordCreationDate.text = st
+        recordOrigin = SubElement(recordInfo,'mods:recordOrigin')
+        recordOrigin.text = 'Manually created by Trent Purdy. Generated into xml using a python script by Erik Radio.'
+        recordSource = SubElement(recordInfo,'mods:recordContentSource')
+        recordSource.text = 'University of Arizona Libraries'
+        recordID = SubElement(recordInfo,'mods:recordIdentifier')
+        recordID.text = row['CallNumber']
+
+
         extension = SubElement(record,'mods:extension')
 
-    tree.write(id + '.xml', xml_declaration=True, encoding="UTF-8")
+        tree.write(recordID.text + '.xml', xml_declaration=True, encoding="UTF-8")
