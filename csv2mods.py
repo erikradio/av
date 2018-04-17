@@ -89,20 +89,25 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
             name = SubElement(record, 'mods:name')
             name.set('type', 'personal')
             namePart = SubElement(name, 'mods:namePart')
-            role = SubElement(name, 'mods:role')
-            # roleTermcode = SubElement(role, 'mods:roleTerm')
-            # roleTermcode.set('type', 'code')
+            if ';' in namerow:
+                role = SubElement(name, 'mods:role')
+                # roleTermcode = SubElement(role, 'mods:roleTerm')
+                # roleTermcode.set('type', 'code')
 
-            roleTermtext = SubElement(role, 'mods:roleTerm')
-            roleTermtext.set('type', 'text')
-            y = x.split(';')
-            namePart.text = y[0]
-            roleTermtext.text = y[1]
+                roleTermtext = SubElement(role, 'mods:roleTerm')
+                roleTermtext.set('type', 'text')
+                y = x.split(';')
+                namePart.text = y[0]
+                roleTermtext.text = y[1]
+            else:
+                namePart.text = x
+
 
         # info about the nature of the resource. not from the spreadsheet
         physDesc = SubElement(record, 'mods:physicalDescription')
-        digOr = SubElement(physDesc, 'mods:digitalOrigin')
-        digOr.text = row['DigitalOrigin']
+        if len(row['DigitalOrigin']) > 0:
+            digOr = SubElement(physDesc, 'mods:digitalOrigin')
+            digOr.text = row['DigitalOrigin']
         form = SubElement(physDesc, 'mods:form')
         form.set('type', 'material')
         form.text = row['Form']
