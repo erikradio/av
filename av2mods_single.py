@@ -57,9 +57,10 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         typeImage.text = row['TypeOfResource']
 
         originInfo = SubElement(root, 'mods:originInfo')
-        dateCreated = SubElement(originInfo, 'mods:dateCreated')
-        dateCreated.set('encoding', 'w3cdtf')
-        dateCreated.text = row['DateCreated']
+        if len(row['DateCreated']) > 0:
+            dateCreated = SubElement(originInfo, 'mods:dateCreated')
+            dateCreated.set('encoding', 'w3cdtf')
+            dateCreated.text = row['DateCreated']
 
         placeCreated = SubElement(originInfo, 'mods:place')
         placeCreated.set('supplied', 'yes')
@@ -135,10 +136,10 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         genre.set('authorityURI', 'http://id.loc.gov')
         genre.set(
             'valueURI', 'http://id.loc.gov/authorities/genreForms/gf2011026431.html')
-        genre.text = 'Oral histories'
+        genre.text = row['Genre']
         accessCond = SubElement(root, 'mods:accessCondition')
         accessCond.set('type', 'use and reproduction')
-        accessCond.set('xlink:href','http://rightsstatements.org/page/UND/1.0/?language=en')
+        # accessCond.set('xlink:href','http://rightsstatements.org/page/UND/1.0/?language=en')
         accessCond.text = 'The copyright and related rights status of this Item has been reviewed by the organization that has made the Item available, but the organization was unable to make a conclusive determination as to the copyright status of the Item. Please refer to the organization that has made the Item available for more information. You are free to use this Item in any way that is permitted by the copyright and related rights legislation that applies to your use.'
         #
 
@@ -148,6 +149,8 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         physLoc.set('valueURI', 'http://id.worldcat.org/fast/1567592')
         shelfLocator = SubElement(location, 'mods:shelfLocator')
         shelfLocator.text = row['CallNumber'] + ', ' + row['ShelfLocator']
+        shelfLocator = SubElement(location, 'mods:shelfLocator')
+        shelfLocator.text = row['callNumberID']
         physLoc.text = 'University of Arizona. Library. Special Collections.'
         typeOfResource = SubElement(root, 'mods:typeOfResource')
         typeOfResource.text = row['TypeOfResource']
