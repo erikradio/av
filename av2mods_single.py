@@ -152,12 +152,12 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         shelfLocator = SubElement(location, 'mods:shelfLocator')
         shelfLocator.text = row['callNumberID']
         physLoc.text = 'University of Arizona. Library. Special Collections.'
-        typeOfResource = SubElement(root, 'mods:typeOfResource')
-        typeOfResource.text = row['TypeOfResource']
+        # typeOfResource = SubElement(root, 'mods:typeOfResource')
+        # typeOfResource.text = row['TypeOfResource']
         # related item was used for the host parent of the plate, e.g. the
         # monographic volume
         relatedItem = SubElement(root, 'mods:relatedItem')
-        relatedItem.set('type', 'series')
+        relatedItem.set('type', 'host')
         relatedTitleInfo = SubElement(relatedItem,'mods:titleInfo')
         relatedTitle = SubElement(relatedTitleInfo,'mods:title')
 
@@ -176,4 +176,9 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
 
 
         extension = SubElement(root,'mods:extension')
+        extension.set('xmlns','http://pbcore.org/PBCore/PBCoreNamespace.html')
+        extension.set('xsi:schemaLocation','http://www.pbcore.org/PBCore/PBCoreNamespace.html http://www.pbcore.org/PBCore/PBCoreSchema.xsd')
+        
+
+        
         tree.write(identifier.text + '.xml', xml_declaration=True, encoding="UTF-8")
