@@ -171,14 +171,27 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         recordOrigin.text = 'Manually created by Trent Purdy. Generated into xml using a python script by Erik Radio.'
         recordSource = SubElement(recordInfo,'mods:recordContentSource')
         recordSource.text = 'University of Arizona Libraries'
-        recordID = SubElement(recordInfo,'mods:recordIdentifier')
-        recordID.text = row['CallNumber']
+        # recordID = SubElement(recordInfo,'mods:recordIdentifier')
+        # recordID.text = row['CallNumber']
 
 
         extension = SubElement(root,'mods:extension')
         extension.set('xmlns','http://pbcore.org/PBCore/PBCoreNamespace.html')
         extension.set('xsi:schemaLocation','http://www.pbcore.org/PBCore/PBCoreNamespace.html http://www.pbcore.org/PBCore/PBCoreSchema.xsd')
-        
+        instDoc = SubElement(extension,'PBCoreInstantionDocument')
+        instPhys = SubElement(instDoc,'instantiationPhysical')
+        instPhys.text= row['instantiationPhysical']
+        instStan = SubElement(instDoc,'instantiationStandard')
+        instStan.text = row['instantiationStandard']
+        instMed = SubElement(instDoc,'instantiationMediaType')
+        instMed.text = row['instantiationMediaType']
+        instGens = SubElement(instdoc,'instantiationGenerations')
+        instGens.text = row['instantiationGenerations']
+        instTracks = SubElement(instDoc,'instantiationTracks')
+        instTracks.text = row['instantiationTracks']
+        instChannel = SubElement(instDoc,'instantiationChannelConfiguration')
+        instChannel.text = row['instantiationChannelConfiguration']
 
-        
+
+
         tree.write(identifier.text + '.xml', xml_declaration=True, encoding="UTF-8")
