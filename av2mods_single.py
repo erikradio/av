@@ -185,12 +185,57 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         instStan.text = row['instantiationStandard']
         instMed = SubElement(instDoc,'instantiationMediaType')
         instMed.text = row['instantiationMediaType']
-        instGens = SubElement(instdoc,'instantiationGenerations')
+        instGens = SubElement(instDoc,'instantiationGenerations')
         instGens.text = row['instantiationGenerations']
         instTracks = SubElement(instDoc,'instantiationTracks')
         instTracks.text = row['instantiationTracks']
         instChannel = SubElement(instDoc,'instantiationChannelConfiguration')
         instChannel.text = row['instantiationChannelConfiguration']
+        instDuran = SubElement(instDoc,'instantiationDuration')
+        instDuran.text = row['instantiationDuration']
+        tapeType = SubElement(instDoc, 'instantiationAnnotation')
+        tapeType.text = row['tapeType']
+        tapeType.set('annotationType','Tape type')
+        tapeThickness = SubElement(instDoc,'instantiationAnnotation')
+        tapeThickness.set('annotationType','Tape thickness')
+        tapeThickness.text = row['tapeThickness']
+        reelSize = SubElement(instDoc,'instantiationAnnotation')
+        reelSize.set('annotationType','Reel size')
+        reelSize.text = row['reelSize']
+        tapeBase = SubElement(instDoc,'instantiationAnnotation')
+        tapeBase.set('annotationType','Tape base')
+        tapeBase.text = row['tapeBase']
+        noiseRed = SubElement(instDoc,'instantiationAnnotation')
+        noiseRed.set('annotationType','Noise reduction')
+        noiseRed.text = row['noiseReduction']
+        stockMan = SubElement(instDoc,'instantiationAnnotation')
+        stockMan.set('annotationType','Stock manufacturer')
+        stockMan.text = row['stockManufacturer']
+        comments = SubElement(instDoc,'instantiationAnnotation')
+        comments.set('annotationType','Comments')
+        comments.text = row['comments']
+        transferComments = SubElement(instDoc,'instantiationAnnotation')
+        transferComments.set('annotationType','Transfer comments')
+        transferComments.text = row['transferComments']
+        instEssence = SubElement(instDoc,'instantiationEssenceTrack')
+        instType = SubElement(instEssence,'essenceTrackType')
+        instType.text = row['essenceTrackType']
+        instPlay = SubElement(instEssence,'essenceTrackPlaybackSpeed')
+        instPlay.set('unitsOfMeasure','ips')
+        instPlay.text = row['essenceTrackPlaybackSpeed']
+        createApp = SubElement(instDoc,'instantiationAnnotation')
+        createApp.set('annotationType','Creating application')
+        createApp.text = row['creatingApplication']
+        sourceDeck = SubElement(instDoc,'instantiationAnnotation')
+        sourceDeck.set('annotationType','Source deck')
+        sourceDeck.text = row['sourceDeck']
+        digitizer = SubElement(instDoc,'instantiationAnnotation')
+        digitizer.set('annotationType','Digitizer')
+        digitizer.text = row['digitizer']
+        qualCon = SubElement(instDoc,'instantiationAnnotation')
+        qualCon.set('annotationType','Quality control')
+        qualCon.text = row['qualityControl']
+
 
 
 
