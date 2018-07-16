@@ -1,6 +1,7 @@
 # -- coding: utf-8 --
-import csv
+import csv, copy
 import sys
+import glob
 import time
 import datetime
 import xml.etree.ElementTree as ET
@@ -28,6 +29,12 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
     # root.set('xsi:schemaLocation',
     #          'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd')
     # tree = ET.ElementTree(root)
+    dirFiles = glob.glob('*.xml')
+
+
+
+
+
     for row in reader:
         # print(row)
         root = Element('mods:mods')
@@ -179,62 +186,85 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         extension.set('xmlns','http://pbcore.org/PBCore/PBCoreNamespace.html')
         extension.set('xsi:schemaLocation','http://www.pbcore.org/PBCore/PBCoreNamespace.html http://www.pbcore.org/PBCore/PBCoreSchema.xsd')
         instDoc = SubElement(extension,'PBCoreInstantionDocument')
-        instPhys = SubElement(instDoc,'instantiationPhysical')
+        files = row['relatedFile']
+        fileList = files.split('|')
+        for file in fileList:
+            for dirFile in dirFiles:
+                if file == dirFile:
+                    autoMD = open(dirFile,'r')
+                    ET.register_namespace('','http://www.pbcore.org/PBCore/PBCoreNamespace.html')
+                    autoTree=ET.parse(autoMD)
+
+                    autoRoot=autoTree.getroot()
+                    autoInst = SubElement(instDoc,'pbcoreInstantiation')
+                    for x in autoRoot:
+                        chunk = copy.deepcopy(x)
+
+                        autoInst.append(chunk)
+        inst = SubElement(instDoc,'pbcoreInstantiation')
+        instPhys = SubElement(inst,'instantiationPhysical')
         instPhys.text= row['instantiationPhysical']
-        instStan = SubElement(instDoc,'instantiationStandard')
+        instStan = SubElement(inst,'instantiationStandard')
         instStan.text = row['instantiationStandard']
-        instMed = SubElement(instDoc,'instantiationMediaType')
+        instMed = SubElement(inst,'instantiationMediaType')
         instMed.text = row['instantiationMediaType']
-        instGens = SubElement(instDoc,'instantiationGenerations')
+        instGens = SubElement(inst,'instantiationGenerations')
         instGens.text = row['instantiationGenerations']
-        instTracks = SubElement(instDoc,'instantiationTracks')
+        instTracks = SubElement(inst,'instantiationTracks')
         instTracks.text = row['instantiationTracks']
-        instChannel = SubElement(instDoc,'instantiationChannelConfiguration')
+        instChannel = SubElement(inst,'instantiationChannelConfiguration')
         instChannel.text = row['instantiationChannelConfiguration']
-        instDuran = SubElement(instDoc,'instantiationDuration')
+        instDuran = SubElement(inst,'instantiationDuration')
         instDuran.text = row['instantiationDuration']
-        tapeType = SubElement(instDoc, 'instantiationAnnotation')
+        tapeType = SubElement(inst, 'instantiationAnnotation')
         tapeType.text = row['tapeType']
         tapeType.set('annotationType','Tape type')
-        tapeThickness = SubElement(instDoc,'instantiationAnnotation')
+        tapeThickness = SubElement(inst,'instantiationAnnotation')
         tapeThickness.set('annotationType','Tape thickness')
         tapeThickness.text = row['tapeThickness']
-        reelSize = SubElement(instDoc,'instantiationAnnotation')
+        reelSize = SubElement(inst,'instantiationAnnotation')
         reelSize.set('annotationType','Reel size')
         reelSize.text = row['reelSize']
-        tapeBase = SubElement(instDoc,'instantiationAnnotation')
+        tapeBase = SubElement(inst,'instantiationAnnotation')
         tapeBase.set('annotationType','Tape base')
         tapeBase.text = row['tapeBase']
-        noiseRed = SubElement(instDoc,'instantiationAnnotation')
+        noiseRed = SubElement(inst,'instantiationAnnotation')
         noiseRed.set('annotationType','Noise reduction')
         noiseRed.text = row['noiseReduction']
-        stockMan = SubElement(instDoc,'instantiationAnnotation')
+        stockMan = SubElement(inst,'instantiationAnnotation')
         stockMan.set('annotationType','Stock manufacturer')
         stockMan.text = row['stockManufacturer']
-        comments = SubElement(instDoc,'instantiationAnnotation')
+        comments = SubElement(inst,'instantiationAnnotation')
         comments.set('annotationType','Comments')
         comments.text = row['comments']
-        transferComments = SubElement(instDoc,'instantiationAnnotation')
+        transferComments = SubElement(inst,'instantiationAnnotation')
         transferComments.set('annotationType','Transfer comments')
         transferComments.text = row['transferComments']
-        instEssence = SubElement(instDoc,'instantiationEssenceTrack')
+        instEssence = SubElement(inst,'instantiationEssenceTrack')
         instType = SubElement(instEssence,'essenceTrackType')
         instType.text = row['essenceTrackType']
         instPlay = SubElement(instEssence,'essenceTrackPlaybackSpeed')
         instPlay.set('unitsOfMeasure','ips')
         instPlay.text = row['essenceTrackPlaybackSpeed']
-        createApp = SubElement(instDoc,'instantiationAnnotation')
+        createApp = SubElement(inst,'instantiationAnnotation')
         createApp.set('annotationType','Creating application')
         createApp.text = row['creatingApplication']
-        sourceDeck = SubElement(instDoc,'instantiationAnnotation')
+        sourceDeck = SubElement(inst,'instantiationAnnotation')
         sourceDeck.set('annotationType','Source deck')
         sourceDeck.text = row['sourceDeck']
-        digitizer = SubElement(instDoc,'instantiationAnnotation')
+        digitizer = SubElement(inst,'instantiationAnnotation')
         digitizer.set('annotationType','Digitizer')
         digitizer.text = row['digitizer']
-        qualCon = SubElement(instDoc,'instantiationAnnotation')
+        qualCon = SubElement(inst,'instantiationAnnotation')
         qualCon.set('annotationType','Quality control')
         qualCon.text = row['qualityControl']
+
+
+
+
+
+
+
 
 
 
