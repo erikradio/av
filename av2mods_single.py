@@ -186,21 +186,7 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         extension.set('xmlns','http://pbcore.org/PBCore/PBCoreNamespace.html')
         extension.set('xsi:schemaLocation','http://www.pbcore.org/PBCore/PBCoreNamespace.html http://www.pbcore.org/PBCore/PBCoreSchema.xsd')
         instDoc = SubElement(extension,'PBCoreInstantionDocument')
-        files = row['relatedFile']
-        fileList = files.split('|')
-        for file in fileList:
-            for dirFile in dirFiles:
-                if file == dirFile:
-                    autoMD = open(dirFile,'r')
-                    ET.register_namespace('','http://www.pbcore.org/PBCore/PBCoreNamespace.html')
-                    autoTree=ET.parse(autoMD)
 
-                    autoRoot=autoTree.getroot()
-                    autoInst = SubElement(instDoc,'pbcoreInstantiation')
-                    for x in autoRoot:
-                        chunk = copy.deepcopy(x)
-
-                        autoInst.append(chunk)
         inst = SubElement(instDoc,'pbcoreInstantiation')
         instPhys = SubElement(inst,'instantiationPhysical')
         instPhys.text= row['instantiationPhysical']
@@ -258,6 +244,42 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         qualCon = SubElement(inst,'instantiationAnnotation')
         qualCon.set('annotationType','Quality control')
         qualCon.text = row['qualityControl']
+        instID = SubElement(inst,'instantiationIdentifier')
+        instID.text = row['Identifier']
+        fileType = SubElement(inst,'instantiationAnnotation')
+        fileType.set('annotationType','Use')
+        fileType.text = 'Physical master'
+
+
+        files = row['relatedFile']
+        fileList = files.split('|')
+        for file in fileList:
+
+
+            for dirFile in dirFiles:
+                # print(dirFile)
+                if file == dirFile:
+
+                    autoMD = open(dirFile,'r')
+                    ET.register_namespace('','http://www.pbcore.org/PBCore/PBCoreNamespace.html')
+                    autoTree=ET.parse(autoMD)
+
+                    autoRoot=autoTree.getroot()
+                    autoInst = SubElement(instDoc,'pbcoreInstantiation')
+
+                    autoFileType = SubElement(autoInst,'instantiationAnnotation')
+                    autoFileType.set('annotationType','Use')
+                    if '_m.' in file:
+                        autoFileType.text = 'Master'
+                        print(autoFileType.text)
+                    if '_a.' in file:
+                        autoFileType.text = 'Access'
+
+
+                    for x in autoRoot:
+                        chunk = copy.deepcopy(x)
+
+                        autoInst.append(chunk)
 
 
 
