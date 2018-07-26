@@ -190,60 +190,78 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         inst = SubElement(instDoc,'pbcoreInstantiation')
         instPhys = SubElement(inst,'instantiationPhysical')
         instPhys.text= row['instantiationPhysical']
-        instStan = SubElement(inst,'instantiationStandard')
-        instStan.text = row['instantiationStandard']
-        instMed = SubElement(inst,'instantiationMediaType')
-        instMed.text = row['instantiationMediaType']
-        instGens = SubElement(inst,'instantiationGenerations')
-        instGens.text = row['instantiationGenerations']
-        instTracks = SubElement(inst,'instantiationTracks')
-        instTracks.text = row['instantiationTracks']
-        instChannel = SubElement(inst,'instantiationChannelConfiguration')
-        instChannel.text = row['instantiationChannelConfiguration']
-        instDuran = SubElement(inst,'instantiationDuration')
-        instDuran.text = row['instantiationDuration']
-        tapeType = SubElement(inst, 'instantiationAnnotation')
-        tapeType.text = row['tapeType']
-        tapeType.set('annotationType','Tape type')
-        tapeThickness = SubElement(inst,'instantiationAnnotation')
-        tapeThickness.set('annotationType','Tape thickness')
-        tapeThickness.text = row['tapeThickness']
-        reelSize = SubElement(inst,'instantiationAnnotation')
-        reelSize.set('annotationType','Reel size')
-        reelSize.text = row['reelSize']
-        tapeBase = SubElement(inst,'instantiationAnnotation')
-        tapeBase.set('annotationType','Tape base')
-        tapeBase.text = row['tapeBase']
+        if len(row['instantiationStandard']) > 0:
+            instStan = SubElement(inst,'instantiationStandard')
+            instStan.text = row['instantiationStandard']
+        if len(row['instantiationMediaType']) > 0:
+            instMed = SubElement(inst,'instantiationMediaType')
+            instMed.text = row['instantiationMediaType']
+        if len(row['instantiationGenerations']) > 0:
+            instGens = SubElement(inst,'instantiationGenerations')
+            instGens.text = row['instantiationGenerations']
+        if len(row['instantiationTracks']) > 0:
+            instTracks = SubElement(inst,'instantiationTracks')
+            instTracks.text = row['instantiationTracks']
+        if len(row['instantiationChannelConfiguration']) > 0:
+            instChannel = SubElement(inst,'instantiationChannelConfiguration')
+            instChannel.text = row['instantiationChannelConfiguration']
+        if len(row['instantiationDuration']) > 0:
+            instDuran = SubElement(inst,'instantiationDuration')
+            instDuran.text = row['instantiationDuration']
+        if len(row['tapeType']) > 0:
+            tapeType = SubElement(inst, 'instantiationAnnotation')
+            tapeType.text = row['tapeType']
+            tapeType.set('annotationType','Tape type')
+        if len(row['tapeThickness']) > 0:
+            tapeThickness = SubElement(inst,'instantiationAnnotation')
+            tapeThickness.set('annotationType','Tape thickness')
+            tapeThickness.text = row['tapeThickness']
+        if len(row['reelSize']) > 0:
+            reelSize = SubElement(inst,'instantiationAnnotation')
+            reelSize.set('annotationType','Reel size')
+            reelSize.text = row['reelSize']
+        if len(row['tapeBase']) > 0:
+            tapeBase = SubElement(inst,'instantiationAnnotation')
+            tapeBase.set('annotationType','Tape base')
+            tapeBase.text = row['tapeBase']
         noiseRed = SubElement(inst,'instantiationAnnotation')
         noiseRed.set('annotationType','Noise reduction')
         noiseRed.text = row['noiseReduction']
         stockMan = SubElement(inst,'instantiationAnnotation')
         stockMan.set('annotationType','Stock manufacturer')
         stockMan.text = row['stockManufacturer']
-        comments = SubElement(inst,'instantiationAnnotation')
-        comments.set('annotationType','Comments')
-        comments.text = row['comments']
-        transferComments = SubElement(inst,'instantiationAnnotation')
-        transferComments.set('annotationType','Transfer comments')
-        transferComments.text = row['transferComments']
-        instEssence = SubElement(inst,'instantiationEssenceTrack')
-        instType = SubElement(instEssence,'essenceTrackType')
-        instType.text = row['essenceTrackType']
-        instPlay = SubElement(instEssence,'essenceTrackPlaybackSpeed')
-        instPlay.set('unitsOfMeasure','ips')
-        instPlay.text = row['essenceTrackPlaybackSpeed']
-        createApp = SubElement(inst,'instantiationAnnotation')
-        createApp.set('annotationType','Creating application')
-        createApp.text = row['creatingApplication']
-        sourceDeck = SubElement(inst,'instantiationAnnotation')
-        sourceDeck.set('annotationType','Source deck')
-        sourceDeck.text = row['sourceDeck']
-        digitizer = SubElement(inst,'instantiationAnnotation')
-        digitizer.set('annotationType','Digitizer')
-        digitizer.text = row['digitizer']
-        qualCon = SubElement(inst,'instantiationAnnotation')
-        qualCon.set('annotationType','Quality control')
-        qualCon.text = row['qualityControl']
+        if len(row['comments']) > 0:
+            comments = SubElement(inst,'instantiationAnnotation')
+            comments.set('annotationType','Comments')
+            comments.text = row['comments']
+        if len(row['transferComments']) > 0:
+            transferComments = SubElement(inst,'instantiationAnnotation')
+            transferComments.set('annotationType','Transfer comments')
+            transferComments.text = row['transferComments']
+        if len(row['essenceTrackType']) > 0:
+            instEssence = SubElement(inst,'instantiationEssenceTrack')
+            instType = SubElement(instEssence,'essenceTrackType')
+            instType.text = row['essenceTrackType']
+        if len(row['essenceTrackPlaybackSpeed']) > 0:
+            instPlay = SubElement(instEssence,'essenceTrackPlaybackSpeed')
+            instPlay.set('unitsOfMeasure','ips')
+            instPlay.text = row['essenceTrackPlaybackSpeed']
+        if len(row['creatingApplication']) > 0:
+            createApp = SubElement(inst,'instantiationAnnotation')
+            createApp.set('annotationType','Creating application')
+            createApp.text = row['creatingApplication']
+        if len(row['sourceDeck']) > 0:
+            sourceDeck = SubElement(inst,'instantiationAnnotation')
+            sourceDeck.set('annotationType','Source deck')
+            sourceDeck.text = row['sourceDeck']
+        if len(row['digitizer']) > 0:
+            digitizer = SubElement(inst,'instantiationAnnotation')
+            digitizer.set('annotationType','Digitizer')
+            digitizer.text = row['digitizer']
+        if len(row['qualityControl']) > 0:
+            qualCon = SubElement(inst,'instantiationAnnotation')
+            qualCon.set('annotationType','Quality control')
+            qualCon.text = row['qualityControl']
         instID = SubElement(inst,'instantiationIdentifier')
         instID.text = row['Identifier']
         fileType = SubElement(inst,'instantiationAnnotation')
