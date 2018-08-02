@@ -51,36 +51,36 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         # inserts filename as local identifier
         identifier = SubElement(root, 'mods:identifier')
         identifier.set('type', 'local')
-        id = row['Identifier']
-        identifier.text = row['Identifier']
+        id = row['identifier']
+        identifier.text = row['identifier']
 
         titleInfo = SubElement(root, 'mods:titleInfo')
         title = SubElement(titleInfo, 'mods:title')
-        title.text = row['Title']
+        title.text = row['title']
 
         partNo = SubElement(titleInfo, 'mods:partNumber')
-        partNo.text = row['Part']
+        partNo.text = row['part']
         typeImage = SubElement(root, 'mods:typeOfResource')
-        typeImage.text = row['TypeOfResource']
+        typeImage.text = row['typeOfResource']
 
         originInfo = SubElement(root, 'mods:originInfo')
-        if len(row['DateCreated']) > 0:
+        if len(row['dateCreated']) > 0:
             dateCreated = SubElement(originInfo, 'mods:dateCreated')
             dateCreated.set('encoding', 'w3cdtf')
-            dateCreated.text = row['DateCreated']
+            dateCreated.text = row['dateCreated']
 
         placeCreated = SubElement(originInfo, 'mods:place')
         placeCreated.set('supplied', 'yes')
         placeTerm = SubElement(placeCreated, 'mods:placeTerm')
         placeTerm.set('authorityURI', 'http://id.worldcat.org/fast')
         placeTerm.set('valueURI', 'http://id.worldcat.org/fast/1205454')
-        placeTerm.text = row['PlaceCreated']
+        placeTerm.text = row['placeCreated']
 
         pub = SubElement(originInfo, 'mods:publisher')
-        pub.text = row['Publisher']
+        pub.text = row['publisher']
 
 
-        langrow=row['Language'].split('|')
+        langrow=row['language'].split('|')
         for x in langrow:
             language = SubElement(root, 'mods:language')
             languageTerm = SubElement(language,'mods:languageTerm')
@@ -96,7 +96,7 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         # else:
         #     language.text = row['Language']
 
-        namerow = row['CreatorName'].split('|')
+        namerow = row['creatorName'].split('|')
 
 
 
@@ -122,28 +122,28 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
 
         # info about the nature of the resource. not from the spreadsheet
         physDesc = SubElement(root, 'mods:physicalDescription')
-        if len(row['DigitalOrigin']) > 0:
+        if len(row['digitalOrigin']) > 0:
             digOr = SubElement(physDesc, 'mods:digitalOrigin')
-            digOr.text = row['DigitalOrigin']
+            digOr.text = row['digitalOrigin']
         form = SubElement(physDesc, 'mods:form')
         form.set('type', 'material')
-        form.text = row['Form']
+        form.text = row['form']
 
         identifier = SubElement(root,'mods:identifier')
         identifier.set('type','local')
-        identifier.text = row['Identifier']
+        identifier.text = row['identifier']
 
         interMed = SubElement(physDesc, 'mods:internetMediaType')
         interMed.text = 'audio/wav'
         #
         abstract = SubElement(root, 'mods:abstract')
-        abstract.text = row['Abstract']
+        abstract.text = row['abstract']
 
         genre = SubElement(root, 'mods:genre')
         genre.set('authorityURI', 'http://id.loc.gov')
         genre.set(
             'valueURI', 'http://id.loc.gov/authorities/genreForms/gf2011026431.html')
-        genre.text = row['Genre']
+        genre.text = row['genre']
         accessCond = SubElement(root, 'mods:accessCondition')
         accessCond.set('type', 'use and reproduction')
         # accessCond.set('xlink:href','http://rightsstatements.org/page/UND/1.0/?language=en')
@@ -155,7 +155,7 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         physLoc.set('authorityURI', 'http://id.worldcat.org/fast')
         physLoc.set('valueURI', 'http://id.worldcat.org/fast/1567592')
         shelfLocator = SubElement(location, 'mods:shelfLocator')
-        shelfLocator.text = row['CallNumber'] + ', ' + row['ShelfLocator']
+        shelfLocator.text = row['callNumber'] + ', ' + row['shelfLocator']
         shelfLocator = SubElement(location, 'mods:shelfLocator')
         shelfLocator.text = row['callNumberID']
         physLoc.text = 'University of Arizona. Library. Special Collections.'
@@ -168,7 +168,7 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
         relatedTitleInfo = SubElement(relatedItem,'mods:titleInfo')
         relatedTitle = SubElement(relatedTitleInfo,'mods:title')
 
-        relatedTitle.text = row['RelatedItem']
+        relatedTitle.text = row['relatedItem']
 
         recordInfo = SubElement(root,'mods:recordInfo')
         recordCreationDate = SubElement(recordInfo,'mods:recordCreationDate')
@@ -263,7 +263,7 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
             qualCon.set('annotationType','Quality control')
             qualCon.text = row['qualityControl']
         instID = SubElement(inst,'instantiationIdentifier')
-        instID.text = row['Identifier']
+        instID.text = row['identifier']
         fileType = SubElement(inst,'instantiationAnnotation')
         fileType.set('annotationType','Use')
         fileType.text = 'Physical master'
