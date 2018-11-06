@@ -216,6 +216,10 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
             tapeThickness = SubElement(inst,'instantiationAnnotation')
             tapeThickness.set('annotationType','Tape thickness')
             tapeThickness.text = row['tapeThickness']
+        if len(row['stockDuration']) > 0:
+            stockDuration = SubElement(inst,'instantiationAnnotation')
+            stockDuration.set('annotationType','Stock duration')
+            stockDuration.text = row['stockDuration']
         if len(row['reelSize']) > 0:
             reelSize = SubElement(inst,'instantiationAnnotation')
             reelSize.set('annotationType','Reel size')
@@ -224,12 +228,14 @@ with open(sys.argv[1], 'rU', errors='ignore') as csvfile:
             tapeBase = SubElement(inst,'instantiationAnnotation')
             tapeBase.set('annotationType','Tape base')
             tapeBase.text = row['tapeBase']
-        noiseRed = SubElement(inst,'instantiationAnnotation')
-        noiseRed.set('annotationType','Noise reduction')
-        noiseRed.text = row['noiseReduction']
-        stockMan = SubElement(inst,'instantiationAnnotation')
-        stockMan.set('annotationType','Stock manufacturer')
-        stockMan.text = row['stockManufacturer']
+        if len(row['noiseReduction']) > 0:
+            noiseRed = SubElement(inst,'instantiationAnnotation')
+            noiseRed.set('annotationType','Noise reduction')
+            noiseRed.text = row['noiseReduction']
+        if len(row['stockManufacturer']) > 0:
+            stockMan = SubElement(inst,'instantiationAnnotation')
+            stockMan.set('annotationType','Stock manufacturer')
+            stockMan.text = row['stockManufacturer']
         if len(row['comments']) > 0:
             comments = SubElement(inst,'instantiationAnnotation')
             comments.set('annotationType','Comments')
